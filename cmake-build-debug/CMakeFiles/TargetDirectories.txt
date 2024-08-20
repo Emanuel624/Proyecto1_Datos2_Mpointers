@@ -1,0 +1,3 @@
+/home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/cmake-build-debug/CMakeFiles/Proyecto1_Datos2_Mpointers.dir
+/home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/cmake-build-debug/CMakeFiles/rebuild_cache.dir
