@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <unordered_map>
+#include <memory>
 
 // Declaración adelantada de la clase MPointerGC (para poder usar en clase MPointer)
 template <typename T>
@@ -11,17 +12,16 @@ class MPointerGC;
 
 //Clase Mpointer
 template <typename T>
-class Mpointer {
+class MPointer {
 private:
     T* ptr;
     int id;
-    static MPointerGC<T> gc;
+    static MPointerGC<T> &gc; //Al ser estatico todas las instancias tienen el mismo
 
 
 public:
-
     //Para crear un objeto nuevo de forma estatica
-    static Mpointer<T> New();
+    static MPointer<T> New();
 
     //Constructor como tal
     MPointer();
@@ -40,7 +40,7 @@ public:
 
 
     //Destructor
-    ~Mpointer();
+    ~MPointer();
 };
 
 
@@ -51,7 +51,7 @@ private:
     std::unordered_map<int, T*> memoryMap;
 
 public:
-    void Register(Mpointer<T>& mpointer);
+    void Register(MPointer<T>& mpointer);
 
     void Unregister(int id);
 

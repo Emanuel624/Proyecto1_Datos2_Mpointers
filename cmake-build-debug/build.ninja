@@ -55,6 +55,18 @@ build CMakeFiles/Proyecto1_Datos2_Mpointers.dir/main.cpp.o: CXX_COMPILER__Proyec
   OBJECT_DIR = CMakeFiles/Proyecto1_Datos2_Mpointers.dir
   OBJECT_FILE_DIR = CMakeFiles/Proyecto1_Datos2_Mpointers.dir
 
+build CMakeFiles/Proyecto1_Datos2_Mpointers.dir/Mpointer.cpp.o: CXX_COMPILER__Proyecto1_Datos2_Mpointers_unscanned_Debug /home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/Mpointer.cpp || cmake_object_order_depends_target_Proyecto1_Datos2_Mpointers
+  DEP_FILE = CMakeFiles/Proyecto1_Datos2_Mpointers.dir/Mpointer.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/Proyecto1_Datos2_Mpointers.dir
+  OBJECT_FILE_DIR = CMakeFiles/Proyecto1_Datos2_Mpointers.dir
+
+build CMakeFiles/Proyecto1_Datos2_Mpointers.dir/ListaEnlazada.cpp.o: CXX_COMPILER__Proyecto1_Datos2_Mpointers_unscanned_Debug /home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/ListaEnlazada.cpp || cmake_object_order_depends_target_Proyecto1_Datos2_Mpointers
+  DEP_FILE = CMakeFiles/Proyecto1_Datos2_Mpointers.dir/ListaEnlazada.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/Proyecto1_Datos2_Mpointers.dir
+  OBJECT_FILE_DIR = CMakeFiles/Proyecto1_Datos2_Mpointers.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Proyecto1_Datos2_Mpointers
@@ -63,7 +75,7 @@ build CMakeFiles/Proyecto1_Datos2_Mpointers.dir/main.cpp.o: CXX_COMPILER__Proyec
 #############################################
 # Link the executable Proyecto1_Datos2_Mpointers
 
-build Proyecto1_Datos2_Mpointers: CXX_EXECUTABLE_LINKER__Proyecto1_Datos2_Mpointers_Debug CMakeFiles/Proyecto1_Datos2_Mpointers.dir/main.cpp.o
+build Proyecto1_Datos2_Mpointers: CXX_EXECUTABLE_LINKER__Proyecto1_Datos2_Mpointers_Debug CMakeFiles/Proyecto1_Datos2_Mpointers.dir/main.cpp.o CMakeFiles/Proyecto1_Datos2_Mpointers.dir/Mpointer.cpp.o CMakeFiles/Proyecto1_Datos2_Mpointers.dir/ListaEnlazada.cpp.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/Proyecto1_Datos2_Mpointers.dir
   POST_BUILD = :
