@@ -27,8 +27,8 @@ public:
     ~LinkedList();
 };
 
-// Implementación de LinkedList
 
+// Implementación de LinkedList
 template <typename T>
 typename LinkedList<T>::Node* LinkedList<T>::find(T* address) {
     Node* current = head;
@@ -76,7 +76,6 @@ void LinkedList<T>::remove(int id) {
                     head = current->next;
                 }
                 delete current->address;  // Liberar memoria asociada
-                current->address = nullptr;  // Evitar doble liberación
                 delete current;
             }
             return;
@@ -85,7 +84,6 @@ void LinkedList<T>::remove(int id) {
         current = current->next;
     }
 }
-
 
 template <typename T>
 void LinkedList<T>::clean() {
