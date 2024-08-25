@@ -13,7 +13,7 @@ int main() {
     std::cout << "Valor en myPtr2 (después de asignar myPtr): " << valor2 << std::endl;
 
     myPtr2 = 10; // Esto debe asignar 10 al puntero interno de myPtr2
-    std::cout << "Nuevo valor en myPtr2: " << *myPtr2 << std::endl;
+    std::cout << "Nuevo valor en myPtr2: " << valor2 << std::endl;
     std::cout << "Valor en myPtr (después de asignar 10 a myPtr2): " << *myPtr << std::endl;
 
     return 0;

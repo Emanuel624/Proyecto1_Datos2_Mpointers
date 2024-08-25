@@ -20,13 +20,12 @@ public:
     LinkedList() : head(nullptr), currentId(0) {}
 
     Node* find(T* address);
-    Node* find(int id);
+    Node* findById(int id);
     void insert(T* address, int& newId);
     void remove(int id);
     void clean();
     ~LinkedList();
 };
-
 
 // Implementación de LinkedList
 template <typename T>
@@ -42,7 +41,7 @@ typename LinkedList<T>::Node* LinkedList<T>::find(T* address) {
 }
 
 template <typename T>
-typename LinkedList<T>::Node* LinkedList<T>::find(int id) {
+typename LinkedList<T>::Node* LinkedList<T>::findById(int id) {
     Node* current = head;
     while (current != nullptr) {
         if (current->id == id) {
@@ -75,7 +74,7 @@ void LinkedList<T>::remove(int id) {
                 } else {
                     head = current->next;
                 }
-                delete current->address;  // Liberar memoria asociada
+                delete current->address;  // Liberar memoria
                 delete current;
             }
             return;
