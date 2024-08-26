@@ -74,8 +74,7 @@ void LinkedList<T>::remove(int id) {
                 } else {
                     head = current->next;
                 }
-                delete current->address;  // Liberar memoria
-                delete current;
+                delete current; // No se elimina 'address' aquí, ya que lo hace el destructor de MPointer
             }
             return;
         }
@@ -96,10 +95,9 @@ void LinkedList<T>::clean() {
             } else {
                 head = current->next;
             }
-            delete current->address;
             Node* temp = current;
             current = current->next;
-            delete temp;
+            delete temp;  // Solo se elimina el nodo, no la memoria apuntada por 'address'
         } else {
             previous = current;
             current = current->next;
@@ -113,7 +111,6 @@ LinkedList<T>::~LinkedList() {
     while (current != nullptr) {
         Node* temp = current;
         current = current->next;
-        delete temp->address;
         delete temp;
     }
 }
