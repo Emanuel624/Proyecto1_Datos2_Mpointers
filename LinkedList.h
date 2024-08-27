@@ -23,6 +23,7 @@ public:
     Node* findById(int id);
     void insert(T* address, int& newId);
     void remove(int id);
+    int getRefCountById(int id);
     void clean();
     ~LinkedList();
 };
@@ -74,13 +75,22 @@ void LinkedList<T>::remove(int id) {
                 } else {
                     head = current->next;
                 }
-                delete current; // No se elimina 'address' aquí, ya que lo hace el destructor de MPointer
+                delete current;
             }
             return;
         }
         previous = current;
         current = current->next;
     }
+}
+
+template <typename T>
+int LinkedList<T>::getRefCountById(int id) {
+    Node* node = findById(id);
+    if (node) {
+        return node->refCount;
+    }
+    return -1;
 }
 
 template <typename T>
@@ -97,7 +107,7 @@ void LinkedList<T>::clean() {
             }
             Node* temp = current;
             current = current->next;
-            delete temp;  // Solo se elimina el nodo, no la memoria apuntada por 'address'
+            delete temp;
         } else {
             previous = current;
             current = current->next;

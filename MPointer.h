@@ -1,11 +1,11 @@
 #ifndef MPOINTER_H
 #define MPOINTER_H
 
-#include "LinkedList.h"  // Incluye la lista enlazada que manejas
+#include "LinkedList.h"  // Incluye la lista enlazada
 #include <thread>
 #include <mutex>
 #include <chrono>
-#include <type_traits>  // Incluir la biblioteca para std::is_same
+#include <type_traits>  // Necesario para std::enable_if y std::is_same_v
 
 template <typename T>
 class MPointerGC;
@@ -24,8 +24,20 @@ public:
     static MPointer<T> New();
     MPointer();
     MPointer(const MPointer<T>& other);
+
+    // Sobrecarga del operador = para asignación de otro MPointer
     MPointer<T>& operator=(const MPointer<T>& other);
-    MPointer<T>& operator=(const T& value);
+
+    // Sobrecarga del operador = para asignación de un valor de tipo T
+    template <typename U,
+              typename = typename std::enable_if<std::is_same_v<T, U>>::type>
+    MPointer<T>& operator=(const U& value) {
+        if (ptr) {
+            *ptr = value;  // Asigna el nuevo valor al objeto apuntado
+        }
+        return *this;
+    }
+
     T& operator*();
     T operator&();
     ~MPointer();
@@ -35,7 +47,6 @@ public:
 template <typename T>
 MPointerGC<T>* MPointer<T>::gc = MPointerGC<T>::getInstance();
 
-// Crear un MPointer con el metodo New()
 template <typename T>
 MPointer<T> MPointer<T>::New() {
     MPointer<T> newPtr;
@@ -66,14 +77,6 @@ MPointer<T>& MPointer<T>::operator=(const MPointer<T>& other) {
 }
 
 template <typename T>
-MPointer<T>& MPointer<T>::operator=(const T& value) {
-    if (ptr) {
-        *ptr = value;  // Asigna el nuevo valor al objeto apuntado
-    }
-    return *this;
-}
-
-template <typename T>
 T& MPointer<T>::operator*() {
     return *ptr;  // Devuelve una referencia al objeto apuntado
 }
@@ -86,9 +89,12 @@ T MPointer<T>::operator&() {
 template <typename T>
 MPointer<T>::~MPointer() {
     std::cout << "Destructor llamado para MPointer con id: " << id << std::endl;
-    if (ptr != nullptr) {
+    int refCount = gc->getRefCountById(id);  // Obtener el refCount
+    if (refCount == 1) {  // Solo liberar si este es el último MPointer
         delete ptr;  // Libera la memoria apuntada por ptr
         gc->Unregister(id);  // Desregistra el MPointer del GC
+    } else {
+        gc->Unregister(id);  // Solo desregistrar si no es el último
     }
 }
 
@@ -121,6 +127,7 @@ public:
 
     void Register(MPointer<T>& mpointer);
     void Unregister(int id);
+    int getRefCountById(int id);  // Se obtiene la cantidad de referencias a una memoria
     void Clean();
     ~MPointerGC() {
         Clean();  // Limpia la memoria al destruir el GC
@@ -147,6 +154,11 @@ void MPointerGC<T>::Register(MPointer<T>& mpointer) {
 template <typename T>
 void MPointerGC<T>::Unregister(int id) {
     memoryList.remove(id);  // Desregistra y reduce el contador de referencias
+}
+
+template <typename T>
+int MPointerGC<T>::getRefCountById(int id) {
+    return memoryList.getRefCountById(id);  // Llama a la función para obtener el refCount
 }
 
 template <typename T>
