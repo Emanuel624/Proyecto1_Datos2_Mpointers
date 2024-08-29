@@ -5,7 +5,8 @@
 #include <thread>
 #include <mutex>
 #include <chrono>
-#include <type_traits>  // Necesario para std::enable_if y std::is_same_v
+#include <type_traits>  // Necesario para std::enable_if y std::is_same_v>
+#include <iostream>
 
 template <typename T>
 class MPointerGC;
@@ -68,10 +69,10 @@ MPointer<T>::MPointer(const MPointer<T>& other) {
 template <typename T>
 MPointer<T>& MPointer<T>::operator=(const MPointer<T>& other) {
     if (this != &other) {
-        gc->Unregister(id);  // Desregistra el ID actual de myPtr2
-        ptr = other.ptr;      // Copia la dirección de memoria de myPtr
-        id = other.id;        // Copia el ID de myPtr a myPtr2
-        gc->Register(*this);  // Registra la nueva asignación
+        gc->DecreaseRefCount(id);  // Reduce el contador de referencias
+        ptr = other.ptr;           // Copia la dirección de memoria
+        id = other.id;             // Copia el ID
+        gc->Register(*this);       // Registra la nueva asignación
     }
     return *this;
 }
@@ -88,15 +89,10 @@ T MPointer<T>::operator&() {
 
 template <typename T>
 MPointer<T>::~MPointer() {
-    std::cout << "Destructor llamado para MPointer con id: " << id << std::endl;
-    int refCount = gc->getRefCountById(id);  // Obtener el refCount
-    if (refCount == 1) {  // Solo liberar si este es el último MPointer
-        delete ptr;  // Libera la memoria apuntada por ptr
-        gc->Unregister(id);  // Desregistra el MPointer del GC
-    } else {
-        gc->Unregister(id);  // Solo desregistrar si no es el último
-    }
+    //std::cout << "Destructor llamado para MPointer con id: " << id << std::endl;
+    gc->DecreaseRefCount(id);  // Informa al GC para disminuir el contador de referencias
 }
+
 
 // Clase GC
 template <typename T>
@@ -111,7 +107,9 @@ private:
     void GC_CleanupThread(int interval) {
         while (true) {
             std::this_thread::sleep_for(std::chrono::seconds(interval));
+            std::cout << "[GC Thread] Ejecutando limpieza..." << std::endl;
             Clean();  // Limpia la memoria no utilizada
+            std::cout << "[GC Thread] Limpieza completada." << std::endl;
         }
     }
 
@@ -120,17 +118,22 @@ public:
         std::lock_guard<std::mutex> lock(gcMutex);
         if (instance == nullptr) {
             instance = new MPointerGC<T>();
-            std::thread(&MPointerGC<T>::GC_CleanupThread, instance, 5).detach();  // Hilo separado para la limpieza periódica
+            //std::cout << "[GC Thread] Iniciando thread de GC..." << std::endl;
+            std::thread(&MPointerGC<T>::GC_CleanupThread, instance, 1).detach();  // Hilo separado para la limpieza periódica
         }
         return instance;
     }
 
     void Register(MPointer<T>& mpointer);
-    void Unregister(int id);
+    void DecreaseRefCount(int id);
     int getRefCountById(int id);  // Se obtiene la cantidad de referencias a una memoria
     void Clean();
-    ~MPointerGC() {
-        Clean();  // Limpia la memoria al destruir el GC
+    ~MPointerGC();
+
+    // Nueva función debug para imprimir el estado de todos los MPointer registrados
+    void debug() const {
+        //std::cout << "[GC Debug] Estado actual del Garbage Collector:" << std::endl;
+        memoryList.debug();
     }
 };
 
@@ -148,12 +151,14 @@ void MPointerGC<T>::Register(MPointer<T>& mpointer) {
         mpointer.id = node->id;  // Copia el ID
     } else {
         memoryList.insert(mpointer.ptr, mpointer.id);  // Inserta la nueva dirección y genera un nuevo ID
+        //std::cout << "[GC Register] Registrado nuevo MPointer con ID: " << mpointer.id << std::endl;
     }
 }
 
 template <typename T>
-void MPointerGC<T>::Unregister(int id) {
-    memoryList.remove(id);  // Desregistra y reduce el contador de referencias
+void MPointerGC<T>::DecreaseRefCount(int id) {
+    //std::cout << "[GC] Decrementando refCount para ID: " << id << std::endl;
+    memoryList.decreaseRefCount(id);  // Disminuye el contador de referencias sin liberar memoria
 }
 
 template <typename T>
@@ -163,7 +168,13 @@ int MPointerGC<T>::getRefCountById(int id) {
 
 template <typename T>
 void MPointerGC<T>::Clean() {
-    memoryList.clean();  // Elimina nodos cuya referencia es cero
+    //std::cout << "[GC Clean] Limpiando memoria sin referencias..." << std::endl;
+    memoryList.clean();  // Elimina nodos cuya referencia es cero y libera la memoria asociada
+}
+
+template <typename T>
+MPointerGC<T>::~MPointerGC() {
+    Clean();  // Limpia la memoria al destruir el GC
 }
 
 #endif  // MPOINTER_H
