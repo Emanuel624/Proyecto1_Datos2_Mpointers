@@ -1,6 +1,8 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
+#include <iostream>
+
 template <typename T>
 class LinkedList {
 private:
@@ -18,33 +20,17 @@ private:
 
 public:
     LinkedList() : head(nullptr), currentId(0) {}
-
     Node* find(T* address);
     Node* findById(int id);
     void insert(T* address, int& newId);
     void remove(int id);
-    void decreaseRefCount(int id);  // Disminuri el contador de referencias
+    void decreaseRefCount(int id);
     void clean();
     T* getAddressById(int id);
     int getRefCountById(int id);
-
-    // Nueva función debug para imprimir el estado de la lista enlazada
-    void debug() const {
-        Node* current = head;
-        std::cout << "[LinkedList Debug] Estado de la lista enlazada:" << std::endl;
-        while (current != nullptr) {
-            std::cout << "  ID: " << current->id
-                      << ", Ptr: " << current->address
-                      << ", RefCount: " << current->refCount
-                      << ", Valor: " << (current->address ? *(current->address) : 0) << std::endl;
-            current = current->next;
-        }
-    }
-
+    void debug() const;
     ~LinkedList();
 };
-
-// Implementación de LinkedList
 
 template <typename T>
 typename LinkedList<T>::Node* LinkedList<T>::find(T* address) {
@@ -92,7 +78,7 @@ void LinkedList<T>::remove(int id) {
                 } else {
                     head = current->next;
                 }
-                delete current; // No se elimina 'address' aquí, ya que lo hará el GC
+                delete current;
             }
             return;
         }
@@ -121,10 +107,10 @@ void LinkedList<T>::clean() {
             } else {
                 head = current->next;
             }
-            delete current->address;  // Libera la memoria apuntada por 'address'
+            delete current->address;
             Node* temp = current;
             current = current->next;
-            delete temp;  // Elimina el nodo
+            delete temp;
         } else {
             previous = current;
             current = current->next;
@@ -142,6 +128,19 @@ template <typename T>
 int LinkedList<T>::getRefCountById(int id) {
     Node* node = findById(id);
     return (node != nullptr) ? node->refCount : 0;
+}
+
+template <typename T>
+void LinkedList<T>::debug() const {
+    Node* current = head;
+    std::cout << "[LinkedList Debug] Estado de la lista enlazada:" << std::endl;
+    while (current != nullptr) {
+        std::cout << "  ID: " << current->id
+                  << ", Ptr: " << current->address
+                  << ", RefCount: " << current->refCount
+                  << ", Valor: " << (current->address ? *(current->address) : 0) << std::endl;
+        current = current->next;
+    }
 }
 
 template <typename T>

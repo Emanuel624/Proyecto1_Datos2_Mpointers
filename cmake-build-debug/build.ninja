@@ -55,18 +55,6 @@ build CMakeFiles/Proyecto1_Datos2_Mpointers.dir/main.cpp.o: CXX_COMPILER__Proyec
   OBJECT_DIR = CMakeFiles/Proyecto1_Datos2_Mpointers.dir
   OBJECT_FILE_DIR = CMakeFiles/Proyecto1_Datos2_Mpointers.dir
 
-build CMakeFiles/Proyecto1_Datos2_Mpointers.dir/Mpointer.cpp.o: CXX_COMPILER__Proyecto1_Datos2_Mpointers_unscanned_Debug /home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/Mpointer.cpp || cmake_object_order_depends_target_Proyecto1_Datos2_Mpointers
-  DEP_FILE = CMakeFiles/Proyecto1_Datos2_Mpointers.dir/Mpointer.cpp.o.d
-  FLAGS = -g -fdiagnostics-color=always
-  OBJECT_DIR = CMakeFiles/Proyecto1_Datos2_Mpointers.dir
-  OBJECT_FILE_DIR = CMakeFiles/Proyecto1_Datos2_Mpointers.dir
-
-build CMakeFiles/Proyecto1_Datos2_Mpointers.dir/LinkedList.cpp.o: CXX_COMPILER__Proyecto1_Datos2_Mpointers_unscanned_Debug /home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/LinkedList.cpp || cmake_object_order_depends_target_Proyecto1_Datos2_Mpointers
-  DEP_FILE = CMakeFiles/Proyecto1_Datos2_Mpointers.dir/LinkedList.cpp.o.d
-  FLAGS = -g -fdiagnostics-color=always
-  OBJECT_DIR = CMakeFiles/Proyecto1_Datos2_Mpointers.dir
-  OBJECT_FILE_DIR = CMakeFiles/Proyecto1_Datos2_Mpointers.dir
-
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Proyecto1_Datos2_Mpointers
@@ -75,13 +63,45 @@ build CMakeFiles/Proyecto1_Datos2_Mpointers.dir/LinkedList.cpp.o: CXX_COMPILER__
 #############################################
 # Link the executable Proyecto1_Datos2_Mpointers
 
-build Proyecto1_Datos2_Mpointers: CXX_EXECUTABLE_LINKER__Proyecto1_Datos2_Mpointers_Debug CMakeFiles/Proyecto1_Datos2_Mpointers.dir/main.cpp.o CMakeFiles/Proyecto1_Datos2_Mpointers.dir/Mpointer.cpp.o CMakeFiles/Proyecto1_Datos2_Mpointers.dir/LinkedList.cpp.o
+build Proyecto1_Datos2_Mpointers: CXX_EXECUTABLE_LINKER__Proyecto1_Datos2_Mpointers_Debug CMakeFiles/Proyecto1_Datos2_Mpointers.dir/main.cpp.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/Proyecto1_Datos2_Mpointers.dir
   POST_BUILD = :
   PRE_LINK = :
   TARGET_FILE = Proyecto1_Datos2_Mpointers
   TARGET_PDB = Proyecto1_Datos2_Mpointers.dbg
+
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target Mpointers
+
+
+#############################################
+# Order-only phony target for Mpointers
+
+build cmake_object_order_depends_target_Mpointers: phony || CMakeFiles/Mpointers.dir
+
+build CMakeFiles/Mpointers.dir/MPointer.cpp.o: CXX_COMPILER__Mpointers_unscanned_Debug /home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/MPointer.cpp || cmake_object_order_depends_target_Mpointers
+  DEP_FILE = CMakeFiles/Mpointers.dir/MPointer.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always
+  INCLUDES = -I/home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers
+  OBJECT_DIR = CMakeFiles/Mpointers.dir
+  OBJECT_FILE_DIR = CMakeFiles/Mpointers.dir
+
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target Mpointers
+
+
+#############################################
+# Link the static library libMpointers.a
+
+build libMpointers.a: CXX_STATIC_LIBRARY_LINKER__Mpointers_Debug CMakeFiles/Mpointers.dir/MPointer.cpp.o
+  LANGUAGE_COMPILE_FLAGS = -g
+  OBJECT_DIR = CMakeFiles/Mpointers.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = libMpointers.a
+  TARGET_PDB = Mpointers.a.dbg
 
 
 #############################################
@@ -109,6 +129,8 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
 # Target aliases.
 
+build Mpointers: phony libMpointers.a
+
 # =============================================================================
 # Folder targets.
 
@@ -117,7 +139,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 #############################################
 # Folder: /home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/cmake-build-debug
 
-build all: phony Proyecto1_Datos2_Mpointers
+build all: phony Proyecto1_Datos2_Mpointers libMpointers.a
 
 # =============================================================================
 # Built-in targets

@@ -12,14 +12,14 @@ int main() {
 
         ptr2 = 666;
 
-        MPointer<int>mp3 = ptr2; //Shallow copy
+        MPointer<int>mp3 = ptr2; //Shallow copy (van a compartir la misma direccion de memoria)
         MPointerGC<int>::getInstance()->debug();
 
         int valor = &mp3;
         std::cout << valor <<std::endl;
     }
 
-    std::this_thread::sleep_for(std::chrono::seconds(5));  // Pausa para permitir que el thread de GC se ejecute
+    std::this_thread::sleep_for(std::chrono::seconds(3));  // Pausa para permitir que el thread de GC se ejecute
 
     return 0;
 }

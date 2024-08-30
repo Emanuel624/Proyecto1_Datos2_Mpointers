@@ -507,3 +507,36 @@ events:
       
       
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/CLion/CLion-2024.1.4/clion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/opt/CLion/CLion-2024.1.4/clion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckCSourceCompiles.cmake:52 (cmake_check_source_compiles)"
+      - "/opt/CLion/CLion-2024.1.4/clion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindThreads.cmake:97 (CHECK_C_SOURCE_COMPILES)"
+      - "/opt/CLion/CLion-2024.1.4/clion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindThreads.cmake:163 (_threads_check_libc)"
+      - "/opt/CLion/CLion-2024.1.4/clion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)"
+      - "/usr/local/lib/cmake/GTest/GTestConfig.cmake:29 (find_dependency)"
+      - "/opt/CLion/CLion-2024.1.4/clion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindGTest.cmake:194 (find_package)"
+      - "CMakeLists.txt:35 (find_package)"
+    directories:
+      source: "/home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-W13JOj"
+      binary: "/home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-W13JOj"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_HAVE_LIBC_PTHREAD"
+      cached: true
+      stdout: |
+        Change Dir: '/home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-W13JOj'
+        
+        Run Build Command(s): /opt/CLion/CLion-2024.1.4/clion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_67aac
+        [1/2] /usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD  -fdiagnostics-color=always -o CMakeFiles/cmTC_67aac.dir/src.c.o -c /home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-W13JOj/src.c
+        [2/2] : && /usr/bin/cc   CMakeFiles/cmTC_67aac.dir/src.c.o -o cmTC_67aac   && :
+        
+      exitCode: 0
+...
