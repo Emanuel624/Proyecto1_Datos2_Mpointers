@@ -1,4 +1,4 @@
 /opt/CLion/CLion-2024.1.4/clion-2024.1.4/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/opt/CLion/CLion-2024.1.4/clion-2024.1.4/bin/ninja/linux/x64/ninja -G Ninja -S /home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers -B /home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/cmake-build-debug
--- Configuring done (0.1s)
+-- Configuring done (0.0s)
 -- Generating done (0.0s)
 -- Build files have been written to: /home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/cmake-build-debug

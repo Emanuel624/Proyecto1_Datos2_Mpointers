@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/test_mpointer.dir/test_mpointer.cpp.o -o test_mpointer  libMpointers.a /usr/local/lib/libgtest_main.a /usr/local/lib/libgtest.a 

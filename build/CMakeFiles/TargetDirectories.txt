@@ -1,0 +1,6 @@
+/home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/build/CMakeFiles/Proyecto1_Datos2_Mpointers.dir
+/home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/build/CMakeFiles/Mpointers.dir
+/home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/build/CMakeFiles/test_mpointer.dir
+/home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/build/CMakeFiles/test.dir
+/home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/build/CMakeFiles/edit_cache.dir
+/home/emanuel/CLionProjects/Proyecto1_Datos2_Mpointers/build/CMakeFiles/rebuild_cache.dir

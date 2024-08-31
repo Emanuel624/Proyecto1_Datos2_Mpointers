@@ -24,6 +24,12 @@ private:
 public:
     static MPointer<T> New();
     MPointer();
+
+    T* get() const {
+        return ptr;
+    }
+
+    //Para shallow copy
     MPointer(const MPointer<T>& other);
 
     // Sobrecarga del operador = para asignación de otro MPointer
@@ -52,6 +58,7 @@ template <typename T>
 MPointer<T> MPointer<T>::New() {
     MPointer<T> newPtr;
     newPtr.ptr = new T();  // Asigna memoria para T en el heap
+    std::cout << "MPointer::New() - Address: " << newPtr.ptr << std::endl;
     gc->Register(newPtr);  // Registra el nuevo MPointer en el GC
     return newPtr;  // Retorna el nuevo MPointer
 }
@@ -148,17 +155,26 @@ void MPointerGC<T>::Register(MPointer<T>& mpointer) {
     auto node = memoryList.find(mpointer.ptr);
     if (node) {
         node->refCount++;  // Incrementa el contador de referencias si ya existe
-        mpointer.id = node->id;  // Copia el ID
+        mpointer.id = node->id;  // Asigna el ID existente al MPointer
+        std::cout << "MPointerGC::Register() - Existing Node Found. RefCount incrementado a: " << node->refCount << std::endl;
     } else {
-        memoryList.insert(mpointer.ptr, mpointer.id);  // Inserta la nueva dirección y genera un nuevo ID
-        //std::cout << "[GC Register] Registrado nuevo MPointer con ID: " << mpointer.id << std::endl;
+        int newId;
+        memoryList.insert(mpointer.ptr, newId);  // Inserta la nueva dirección y genera un nuevo ID
+        mpointer.id = newId;  // Asigna el nuevo ID al MPointer
+        std::cout << "MPointerGC::Register() - New Node Created. ID: " << newId << ", RefCount: " << memoryList.getRefCountById(newId) << std::endl;
     }
 }
 
 template <typename T>
 void MPointerGC<T>::DecreaseRefCount(int id) {
-    //std::cout << "[GC] Decrementando refCount para ID: " << id << std::endl;
-    memoryList.decreaseRefCount(id);  // Disminuye el contador de referencias sin liberar memoria
+    auto node = memoryList.findById(id);
+    if (node && node->refCount > 0) {
+        node->refCount--;  // Decrementa el contador de referencias
+        std::cout << "MPointerGC::DecreaseRefCount() - ID: " << id << ", RefCount decrementado a: " << node->refCount << std::endl;
+        if (node->refCount == 0) {
+            memoryList.remove(id);  // Si llega a 0, elimina el nodo
+        }
+    }
 }
 
 template <typename T>
@@ -168,9 +184,9 @@ int MPointerGC<T>::getRefCountById(int id) {
 
 template <typename T>
 void MPointerGC<T>::Clean() {
-    //std::cout << "[GC Clean] Limpiando memoria sin referencias..." << std::endl;
     memoryList.clean();  // Elimina nodos cuya referencia es cero y libera la memoria asociada
 }
+
 
 template <typename T>
 MPointerGC<T>::~MPointerGC() {

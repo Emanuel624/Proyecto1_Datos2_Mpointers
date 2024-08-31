@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/Proyecto1_Datos2_Mpointers.dir/main.cpp.o -o Proyecto1_Datos2_Mpointers 
