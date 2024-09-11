@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 # Especifica el ejecutable
 add_executable(Proyecto1_Datos2_Mpointers main.cpp)
 
-# Especifica que estamos creando una biblioteca estática
+# Especifica que se crea una biblioteca estática
 add_library(Mpointers STATIC MPointer.cpp)
 
 # Incluye el directorio actual para buscar los archivos de cabecera

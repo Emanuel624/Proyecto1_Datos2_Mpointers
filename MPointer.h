@@ -28,6 +28,10 @@ public:
         return ptr;
     }
 
+    int getId() {
+        return id;
+    }
+
     // Para shallow copy
     MPointer(const MPointer<T>& other);
 
@@ -58,7 +62,7 @@ template <typename T>
 MPointer<T> MPointer<T>::New() {
     MPointer<T> newPtr;
     newPtr.ptr = new T();  // Asigna memoria para T en el heap
-    std::cout << "MPointer::New() - Address: " << newPtr.ptr << std::endl;
+    //std::cout << "MPointer::New() - Address: " << newPtr.ptr << std::endl;
     gc->Register(newPtr);  // Registra el nuevo MPointer en el GC
     return newPtr;  // Retorna el nuevo MPointer
 }
@@ -103,6 +107,7 @@ template <typename T>
 MPointer<T>::~MPointer() {
     gc->DecreaseRefCount(id);  // Informa al GC para disminuir el contador de referencias
 }
+
 
 // Clase GC
 template <typename T>
@@ -161,6 +166,14 @@ public:
                           << std::endl;
             }
         }
+    }
+
+    int getRefCount(int id) const {
+        return memoryList.getRefCountById(id);
+    }
+
+    T* getAddress(int id) const {
+        return memoryList.getAddressById(id);
     }
 
     // Registrar un nuevo MPointer
