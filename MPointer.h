@@ -92,7 +92,6 @@ template <typename T>
 MPointer<T> MPointer<T>::New() {
     MPointer<T> newPtr;
     newPtr.ptr = new T();  // Asigna memoria para T en el heap
-    //std::cout << "MPointer::New() - Address: " << newPtr.ptr << std::endl;
     gc->Register(newPtr);  // Registra el nuevo MPointer en el GC
     return newPtr;  // Retorna el nuevo MPointer
 }
@@ -135,7 +134,6 @@ T MPointer<T>::operator&() {
 // Destructor de MPointer que llama a MPointerGC
 template <typename T>
 MPointer<T>::~MPointer() {
-    //std::cout << "Destructor called for MPointer with ID: " << id << std::endl;
     gc->DecreaseRefCount(id);  // Informa al GC para disminuir el contador de referencias
 }
 
@@ -266,8 +264,10 @@ void MPointerGC<T>::FreeMemory(int id) {
         std::cout << "Liberando memoria para ID: " << id << std::endl;
         delete address;  // Libera la memoria asignada
     }
-    memoryList.remove(id);  // Elimina el nodo de la lista
+    memoryList.remove(id);  // Elimina el nodo de la lista de memoria
+    //std::cout << "Memoria para ID: " << id << " fue liberada y removida de la lista" << std::endl;
 }
+
 
 template <typename T>
 MPointerGC<T>::~MPointerGC() {
@@ -286,6 +286,5 @@ MPointerGC<T>::~MPointerGC() {
         }
     }
 }
-
 
 #endif  // MPOINTER_H
