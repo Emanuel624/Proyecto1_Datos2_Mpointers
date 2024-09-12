@@ -73,8 +73,8 @@ MPointer<T>::MPointer() : ptr(nullptr), id(-1) {}
 // Shallow Copy
 template <typename T>
 MPointer<T>::MPointer(const MPointer<T>& other) {
-    ptr = other.ptr;
-    id = other.id;
+    ptr = other.ptr;      // Copia la direccion de memoria
+    id = other.id;        // Copia el ID
     gc->Register(*this);  // Registra la copia en el GC
 }
 

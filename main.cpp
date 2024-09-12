@@ -1,21 +1,36 @@
 #include <iostream>
 #include "MPointer.h"
+#include "../../../../usr/include/complex.h"
+
+MPointer<int> foo() {
+    MPointer<int> temp2 = MPointer<int>::New();
+    MPointer<int> temp = MPointer<int>::New();
+    temp = 666;
+    MPointerGC<int>::getInstance()->debug();
+    return temp;
+}
+
+
 int main() {
     {
-        MPointer<int> ptr1 = MPointer<int>::New();
-        MPointer<int> ptr2 = MPointer<int>::New();
+        MPointer<int> mp1 = MPointer<int>::New();
+        MPointer<int> mp2 = MPointer<int>::New();
+        foo();
 
-        *ptr1 = 5;
-        //Llama a debug en MPointerGC para ber el estado
         MPointerGC<int>::getInstance()->debug();
 
-        ptr2 = 666;
 
-        MPointer<int>mp3 = ptr2; //Shallow copy (van a compartir la misma direccion de memoria) aumenta el refcount
+        *mp1 = 100;
+        mp2 = 50;
+
+
+        MPointer<int> mp3 = mp2;
         MPointerGC<int>::getInstance()->debug();
 
-        int valor = &mp3;
-        std::cout << valor <<std::endl;
+
+        mp3 = mp1;
+        MPointerGC<int>::getInstance()->debug();
+        MPointerGC<int>::getInstance()->debug();
     }
 
     std::this_thread::sleep_for(std::chrono::seconds(5));  // Pausa para lograr que el thread de GC se ejecute
