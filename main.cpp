@@ -37,6 +37,7 @@ int main() {
         MPointer<int> mp3 = mp2; //(shallow copy)
 
         MPointerGC<int>::getInstance()->debug();
+
         */
     }
 
