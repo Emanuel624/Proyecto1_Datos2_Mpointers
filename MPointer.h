@@ -10,7 +10,6 @@
 template <typename T>
 class MPointerGC;
 
-// Clase MPointer
 template <typename T>
 class MPointer {
 private:
@@ -38,6 +37,16 @@ public:
     // Sobrecarga del operador = para asignación de otro MPointer
     MPointer<T>& operator=(const MPointer<T>& other);
 
+    // Sobrecarga del operador = para nullptr
+    MPointer<T>& operator=(std::nullptr_t) {
+        if (ptr != nullptr) {
+            gc->DecreaseRefCount(id);  // Reduce el contador de referencias
+            ptr = nullptr;  // Asigna nullptr
+            id = -1;        // Reinicia el ID
+        }
+        return *this;
+    }
+
     // Sobrecarga del operador = para asignación de un valor de tipo T
     template <typename U,
               typename = typename std::enable_if<std::is_same_v<T, U>>::type>
@@ -48,10 +57,31 @@ public:
         return *this;
     }
 
+    // Constructor que acepta nullptr
+    MPointer(std::nullptr_t) : ptr(nullptr), id(-1) {}
+
+
+    // Sobrecarga del operador != para nullptr
+    bool operator!=(std::nullptr_t) const {
+        return ptr != nullptr;
+    }
+
+    // Sobrecarga del operador ->
+    T* operator->() const {
+        return ptr;
+    }
+
+    // Sobrecarga del operador == para nullptr
+    bool operator==(std::nullptr_t) const {
+        return ptr == nullptr;
+    }
+
+
     T& operator*();
     T operator&();
     ~MPointer();
 };
+
 
 // Inicializa la clase singleton de MPointerGC
 template <typename T>
@@ -73,8 +103,8 @@ MPointer<T>::MPointer() : ptr(nullptr), id(-1) {}
 // Shallow Copy
 template <typename T>
 MPointer<T>::MPointer(const MPointer<T>& other) {
-    ptr = other.ptr;      // Copia la direccion de memoria
-    id = other.id;        // Copia el ID
+    ptr = other.ptr;
+    id = other.id;
     gc->Register(*this);  // Registra la copia en el GC
 }
 
@@ -105,6 +135,7 @@ T MPointer<T>::operator&() {
 // Destructor de MPointer que llama a MPointerGC
 template <typename T>
 MPointer<T>::~MPointer() {
+    //std::cout << "Destructor called for MPointer with ID: " << id << std::endl;
     gc->DecreaseRefCount(id);  // Informa al GC para disminuir el contador de referencias
 }
 
@@ -130,11 +161,13 @@ private:
             for (int id = 1; id <= memoryList.getCurrentId(); ++id) {
                 int refCount = memoryList.getRefCountById(id);
                 if (refCount == 0) {
+                    //std::cout << "[GC Thread] refCount 0 for ID: " << id << std::endl;
                     FreeMemory(id);  // Libera la memoria
                 }
             }
         }
     }
+
 
     // Constructor que inicia el hilo de limpieza
     MPointerGC() {
@@ -222,6 +255,7 @@ void MPointerGC<T>::DecreaseRefCount(int id) {
     int refCount = memoryList.getRefCountById(id);
     if (refCount > 0) {
         memoryList.setRefCountById(id, refCount - 1);  // Decrementa el refCount
+        //std::cout << "Decreasing refCount for ID: " << id << " to " << refCount - 1 << std::endl;
     }
 }
 

@@ -163,7 +163,7 @@ TEST(MPointerTest, ReferenceCountDecreasesOnDestruction) {
 
     {
         auto ptr2 = ptr1;  // Incrementa el contador de referencias (implícitamente)
-        EXPECT_EQ(*ptr2, 100);  // Asegúrate de que ptr2 tiene el mismo valor que ptr1
+        EXPECT_EQ(*ptr2, 100);  // Ptr2 tiene el mismo valor que ptr1
     }  // ptr2 sale del alcance, debe reducirse el contador de referencias (sin usar getRefCount)
 
     // Destruir ptr1, lo que debería liberar la memoria
