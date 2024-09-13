@@ -75,7 +75,7 @@ TEST(LinkedListTest, Destructor) {
     list->insert(value2, id2);
 
     delete list;  // Destruir la lista
-    // No se necesita liberar manualmente `value1` o `value2`, ya que la lista solo elimina los nodos, no el contenido
+    // No se necesita liberar manualmente `value1` o `value2`, la lista solo elimina los nodo
 }
 
 // Caso de prueba: Buscar un nodo inexistente por dirección
@@ -100,7 +100,7 @@ TEST(MPointerTest, CreateNewMPointer) {
     EXPECT_NE(ptr.get(), nullptr);  // Verifica que el puntero no sea nulo
 }
 
-// Caso de prueba: Verificar la asignación de valores a través del operador *
+// Caso de prueba: Verificar la asignación de valores con el operador *
 TEST(MPointerTest, AssignValueUsingDereferenceOperator) {
     auto ptr = MPointer<int>::New();
     *ptr = 42;  // Asignar un valor
@@ -136,7 +136,7 @@ TEST(MPointerTest, AssignmentOperatorForPrimitiveValue) {
     EXPECT_EQ(*ptr, 80);  // Verificar que el nuevo valor es el esperado
 }
 
-// Caso de prueba: Verificar el comportamiento del destructor (al reducir el refCount)
+//Verificar el comportamiento del destructor (al reducir el refCount)
 TEST(MPointerTest, DestructorBehavior) {
     auto ptr1 = MPointer<int>::New();
     *ptr1 = 42;
@@ -144,7 +144,7 @@ TEST(MPointerTest, DestructorBehavior) {
     {
         auto ptr2 = MPointer<int>::New();
         ptr2 = ptr1;  // ptr2 ahora apunta al mismo objeto que ptr1
-    }  // ptr2 sale del alcance, debería reducirse el contador de referencias
+    }  // ptr2 sale del alcance, se reduce el contador de referencias
 
     // Aquí debería quedar solo una referencia a ptr1
     EXPECT_EQ(*ptr1, 42);  // Verificar que el valor aún es accesible
@@ -156,15 +156,15 @@ TEST(MPointerTest, NullPointerInitialization) {
     EXPECT_EQ(ptr.get(), nullptr);  // Debe ser nulo
 }
 
-//Se revisar que el refCount si baje cuando se detruyen MPointers
+//Se revisa que el refCount si baje cuando se detruyen MPointers
 TEST(MPointerTest, ReferenceCountDecreasesOnDestruction) {
     auto ptr1 = MPointer<int>::New();
     *ptr1 = 100;
 
     {
-        auto ptr2 = ptr1;  // Incrementa el contador de referencias (implícitamente)
+        auto ptr2 = ptr1;  // Incrementa el contador de referencias
         EXPECT_EQ(*ptr2, 100);  // Ptr2 tiene el mismo valor que ptr1
-    }  // ptr2 sale del alcance, debe reducirse el contador de referencias (sin usar getRefCount)
+    }  // ptr2 sale del alcance, se reduce el contador de referencias (sin usar getRefCount)
 
     // Destruir ptr1, lo que debería liberar la memoria
     ptr1.~MPointer();
@@ -197,6 +197,7 @@ TEST(GarbageCollectorTest, GarbageCollectorThreadRunning) {
     EXPECT_NE(MPointerGC<int>::getInstance(), nullptr);  // GC debe estar activo
 }
 
+//Main para hacer todas las pruebas a la vez
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

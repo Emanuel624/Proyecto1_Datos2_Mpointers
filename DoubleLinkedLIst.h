@@ -2,8 +2,8 @@
 #define DOUBLELINKEDLIST_H
 #include <stdexcept> // Para manejar excepciones
 #include "MPointer.h"
-//
-// Definición del nodo de la lista doblemente enlazada utilizando MPointers
+
+// Definicion del nodo de la lista doblemente enlazada utilizando MPointers
 template <typename T>
 class Node {
 public:
@@ -102,7 +102,7 @@ public:
     }
 };
 
-// Función auxiliar para particionar la lista
+// Particionar la lista
 template <typename T>
 int partition(DoublyLinkedList<T>& list, int low, int high) {
     T pivot = list.get(high);

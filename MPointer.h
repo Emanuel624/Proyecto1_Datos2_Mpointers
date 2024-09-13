@@ -24,11 +24,11 @@ public:
     MPointer();
 
     T* get() const {
-        return ptr;
+        return ptr; //Poder retornar un atributo privado
     }
 
     int getId() {
-        return id;
+        return id; //Poder retornar un atributo privado
     }
 
     // Para shallow copy
@@ -37,7 +37,7 @@ public:
     // Sobrecarga del operador = para asignación de otro MPointer
     MPointer<T>& operator=(const MPointer<T>& other);
 
-    // Sobrecarga del operador = para nullptr
+    // Sobrecarga del operador = para nullptr (Lista doblemente enlazada)
     MPointer<T>& operator=(std::nullptr_t) {
         if (ptr != nullptr) {
             gc->DecreaseRefCount(id);  // Reduce el contador de referencias
@@ -47,7 +47,7 @@ public:
         return *this;
     }
 
-    // Sobrecarga del operador = para asignación de un valor de tipo T
+    // Sobrecarga del operador = para asignación de un valor de tipo T (el mismo a lo interno de MPointer)
     template <typename U,
               typename = typename std::enable_if<std::is_same_v<T, U>>::type>
     MPointer<T>& operator=(const U& value) {
@@ -61,17 +61,17 @@ public:
     MPointer(std::nullptr_t) : ptr(nullptr), id(-1) {}
 
 
-    // Sobrecarga del operador != para nullptr
+    // Sobrecarga del operador != para nullptr (para lista doblemente enlazada)
     bool operator!=(std::nullptr_t) const {
         return ptr != nullptr;
     }
 
-    // Sobrecarga del operador ->
+    // Sobrecarga del operador -> (para lista doblemente enlazada)
     T* operator->() const {
         return ptr;
     }
 
-    // Sobrecarga del operador == para nullptr
+    // Sobrecarga del operador == para nullptr (para lista doblemente enlazada)
     bool operator==(std::nullptr_t) const {
         return ptr == nullptr;
     }
@@ -96,6 +96,7 @@ MPointer<T> MPointer<T>::New() {
     return newPtr;  // Retorna el nuevo MPointer
 }
 
+//Constructor por default (no funciona, para que sea por el metodo new)
 template <typename T>
 MPointer<T>::MPointer() : ptr(nullptr), id(-1) {}
 
@@ -144,7 +145,7 @@ class MPointerGC {
 private:
     LinkedList<T> memoryList;  // Lista enlazada que guarda direcciones de memoria
     static MPointerGC<T>* instance;  // Singleton para la instancia de GC
-    static std::mutex gcMutex;  // Mutex para sincronización
+    static std::mutex gcMutex;  // Mutex para sincronización del thread
     std::thread gcThread;  // Hilo para ejecutar la limpieza periódica
     bool running = true;  // Controla si el hilo de limpieza sigue ejecutándose
 
@@ -173,6 +174,7 @@ private:
     }
 
 public:
+    //Metodo estatica que vuelve a la clase Singleton
     static MPointerGC<T>* getInstance() {
         std::lock_guard<std::mutex> lock(gcMutex);
         if (instance == nullptr) {
@@ -199,10 +201,12 @@ public:
         }
     }
 
+    //Obtener el refCount de un nodo especifico (es decir de un MPointer)
     int getRefCount(int id) const {
         return memoryList.getRefCountById(id);
     }
 
+    //Obtener la dirrecion de memoria guardada dentro de la lista enlazada
     T* getAddress(int id) const {
         return memoryList.getAddressById(id);
     }
@@ -229,6 +233,7 @@ MPointerGC<T>* MPointerGC<T>::instance = nullptr;
 template <typename T>
 std::mutex MPointerGC<T>::gcMutex;
 
+//Registro dentro del GC
 template <typename T>
 void MPointerGC<T>::Register(MPointer<T>& mpointer) {
     auto node = memoryList.find(mpointer.ptr);
@@ -242,12 +247,14 @@ void MPointerGC<T>::Register(MPointer<T>& mpointer) {
     }
 }
 
+//Aumnetar el refCount
 template <typename T>
 void MPointerGC<T>::IncreaseRefCount(int id) {
     int refCount = memoryList.getRefCountById(id);
     memoryList.setRefCountById(id, refCount + 1);  // Incrementa el refCount
 }
 
+//Disminuir el refCount
 template <typename T>
 void MPointerGC<T>::DecreaseRefCount(int id) {
     int refCount = memoryList.getRefCountById(id);
@@ -257,6 +264,7 @@ void MPointerGC<T>::DecreaseRefCount(int id) {
     }
 }
 
+//Libera la memoria del puntero interno
 template <typename T>
 void MPointerGC<T>::FreeMemory(int id) {
     T* address = memoryList.getAddressById(id);
@@ -269,6 +277,7 @@ void MPointerGC<T>::FreeMemory(int id) {
 }
 
 
+//Destructor, en caso de que el Thread no haya limpiado la memoria y el programa pare
 template <typename T>
 MPointerGC<T>::~MPointerGC() {
     running = false;  // Detiene el hilo
